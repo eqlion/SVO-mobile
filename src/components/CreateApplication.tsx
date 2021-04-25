@@ -1,15 +1,11 @@
 import React, { FC, useCallback, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import {
-    Card,
-    Title,
-    Paragraph,
-    Button,
-    TextInput,
-    Colors,
-} from "react-native-paper";
+import { Card, Paragraph, Button, TextInput } from "react-native-paper";
 import dayjs from "dayjs";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { Picker } from "@react-native-picker/picker";
+import { useSelector } from "react-redux";
+import { RootState } from "../reducers";
 
 interface IProps {
     start?: Date;
@@ -32,6 +28,7 @@ const CreateApplication: FC<IProps> = ({
 }) => {
     const [mode, setMode] = useState<"start" | "end">("start");
     const [visible, setVisible] = useState(false);
+    const { parkingPlaces } = useSelector((state: RootState) => state.app);
 
     const onPress = useCallback((mode: "start" | "end") => {
         setMode(mode);
@@ -84,14 +81,22 @@ const CreateApplication: FC<IProps> = ({
                 minimumDate={new Date()}
                 date={mode === "start" ? start : end}
             />
-            <TextInput
+            <Picker
+                selectedValue={parkingSpace}
+                onValueChange={itemValue => setParkingSpace(itemValue)}>
+                {parkingPlaces.map(i => (
+                    <Picker.Item label={i.code} value={i.id} key={i.id} />
+                ))}
+            </Picker>
+
+            {/* <TextInput
                 style={styles.input}
                 keyboardType="number-pad"
                 value={parkingSpace}
                 onChangeText={setParkingSpace}
                 label="Место"
                 mode="outlined"
-            />
+            /> */}
             <Button onPress={onSubmit}>Создать заявку</Button>
         </Card>
     );

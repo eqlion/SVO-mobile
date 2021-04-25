@@ -17,7 +17,11 @@ const BigResourceCard: FC<IProps> = ({
                 {"#"}
                 {id}
             </Paragraph>
-            <Image style={styles.image} source={{ uri: photo }} />
+            <Image
+                style={styles.image}
+                source={{ uri: photo }}
+                resizeMode="contain"
+            />
             <Paragraph>{description}</Paragraph>
         </Card>
     );

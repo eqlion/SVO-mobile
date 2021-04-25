@@ -19,12 +19,16 @@ const ResourceCard: FC<IProps> = ({ resource }) => {
             <Card style={styles.card}>
                 <Title>
                     {title}
-                    <Paragraph>
+                    {/* <Paragraph>
                         {"#"}
                         {id}
-                    </Paragraph>
+                    </Paragraph> */}
                 </Title>
-                <Image style={styles.image} source={{ uri: photo }} />
+                <Image
+                    style={styles.image}
+                    source={{ uri: photo }}
+                    resizeMode="contain"
+                />
                 <Paragraph>{description}</Paragraph>
             </Card>
         </TouchableOpacity>

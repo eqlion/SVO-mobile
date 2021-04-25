@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Application, Resource } from "../types";
+import { Application, ParkingPlace, Resource } from "../types";
 
 const URL_API = "http://api.svo.lapotnikov.ru/api/";
 
@@ -39,11 +39,22 @@ export const getToken = (credentials: {
 export const getApplications = () =>
     get("worker/applications/").then(r => r as Application[]);
 
-export const createApplication = (application: Application) =>
-    post("worker/applications/", application);
+export const createApplication = (
+    application: Omit<
+        Application,
+        | "id"
+        | "status"
+        | "service_estimation"
+        | "worker_estimation"
+        | "resource_estimation"
+    >,
+) => post("worker/applications/", application);
 
 export const getUser = () =>
     get("core/users/info/").then((data: { id: number }) => data.id);
 
 export const getResources = () =>
     get("worker/resources/").then(r => r as Resource[]);
+
+export const getParkingPlaces = () =>
+    get("core/parking-places/").then(r => r as ParkingPlace[]);

@@ -4,7 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import Icons from "react-native-vector-icons/MaterialCommunityIcons";
 import { NavigatorScreenParams } from "@react-navigation/native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import LogIn from "./src/screens/LogIn";
 import Resources from "./src/screens/Resources";
@@ -14,6 +14,8 @@ import ApplicationHistory from "./src/screens/Main";
 import { RootState } from "./src/reducers";
 import useSetToken from "./src/hooks/useSetToken";
 import { Resource as IResource } from "./src/types";
+import { Snackbar } from "react-native-paper";
+import { setSnackBar } from "./src/reducers/app";
 
 export type RootStackParamList = {
     LogIn: undefined;
@@ -100,17 +102,26 @@ const Router: FC = () => {
     const isLoggedIn = useSelector((state: RootState) => !!state.user.access);
     useSetToken();
     const initialRouteName = isLoggedIn ? "Home" : "LogIn";
+    const { snackBar } = useSelector((state: RootState) => state.app);
+    const dispatch = useDispatch();
 
     return (
-        <Stack.Navigator
-            screenOptions={{
-                headerShown: false,
-            }}
-            initialRouteName={initialRouteName}
-            headerMode="none">
-            <Stack.Screen name="LogIn" component={LogIn} />
-            <Stack.Screen name="Home" component={Home} />
-        </Stack.Navigator>
+        <>
+            <Stack.Navigator
+                screenOptions={{
+                    headerShown: false,
+                }}
+                initialRouteName={initialRouteName}
+                headerMode="none">
+                <Stack.Screen name="LogIn" component={LogIn} />
+                <Stack.Screen name="Home" component={Home} />
+            </Stack.Navigator>
+            <Snackbar
+                visible={!!snackBar}
+                onDismiss={() => dispatch(setSnackBar(""))}>
+                {snackBar}
+            </Snackbar>
+        </>
     );
 };
 

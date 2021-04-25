@@ -20,6 +20,7 @@ export interface Application {
     service_estimation: null;
     worker_estimation: null;
     resource_estimation: null;
+    parking_place: number;
 }
 
 export interface Resource {
@@ -29,4 +30,11 @@ export interface Resource {
     photo: string;
     geo_lat: number;
     geo_lon: number;
+}
+
+export interface ParkingPlace {
+    id: number;
+    code: string;
+    geo_lat: string;
+    geo_lon: string;
 }

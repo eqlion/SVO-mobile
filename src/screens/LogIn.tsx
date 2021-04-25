@@ -41,7 +41,10 @@ const LogIn: FC = () => {
     return (
         <View style={styles.container}>
             <Formik
-                initialValues={{ email: "", password: "" }}
+                initialValues={{
+                    email: "common@yandex.ru",
+                    password: "qwerty1234",
+                }}
                 onSubmit={onSubmit}
                 validationSchema={validationSchema}>
                 {({ values, errors, touched, handleChange, handleSubmit }) => (

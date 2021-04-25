@@ -1,13 +1,31 @@
-import React, { FC } from "react";
+import React, { FC, useCallback, useState } from "react";
 import { FlatList } from "react-native-gesture-handler";
-import { StyleSheet, View } from "react-native";
+import { RefreshControl, StyleSheet, View } from "react-native";
 import { Appbar, Headline } from "react-native-paper";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ApplicationCard from "../components/ApplicationCard";
 import { RootState } from "../reducers";
+import { setApplications } from "../reducers/app";
+import { getApplications } from "../api";
 
 const ApplicationHistory: FC = () => {
+    const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch();
     const { applications } = useSelector((state: RootState) => state.app);
+    const loadApplications = useCallback(() => {
+        console.log("LOADING");
+        getApplications()
+            .then(i => {
+                dispatch(setApplications(i));
+            })
+            .catch(e =>
+                console.log(
+                    "ERROR ON GETTING APPLICATIONS",
+                    JSON.stringify(e.response, null, 2),
+                ),
+            )
+            .finally(() => setLoading(false));
+    }, [dispatch]);
     return (
         <>
             <Appbar.Header statusBarHeight={0}>
@@ -20,6 +38,12 @@ const ApplicationHistory: FC = () => {
                     </View>
                 }
                 data={applications}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={loading}
+                        onRefresh={loadApplications}
+                    />
+                }
                 keyExtractor={item => "" + item.id}
                 renderItem={({ item }) => (
                     <ApplicationCard application={item} />
